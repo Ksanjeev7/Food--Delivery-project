@@ -26,15 +26,23 @@
 <div class="submit-box">
 <input type="submit" value="Login">
 </div>
+<<<<<<< HEAD
 <div class="forget-password">
     <p>Forget Password? <a href="forgetPassword.jsp">Click Here</a></p>
 </div>
+=======
+>>>>>>> 44fe5e6731138daa4aee14ed7f6d78cc67d18a2d
 <div class="signup-link">
 <% if (request.getAttribute("errorMessage") != null) { %>
                     <p style="color: red;"><%= request.getAttribute("errorMessage") %></p>
                 <% } %>
 <p>Don't have an account? <a href="signUp1.jsp">SignUp</a>
 </div>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 44fe5e6731138daa4aee14ed7f6d78cc67d18a2d
 </form>
 
 </div>

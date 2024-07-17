@@ -104,6 +104,7 @@ body {
     font-weight: bold;
 }
 
+<<<<<<< HEAD
 .forget-password {
     margin-top: 15px;
     text-align: center;
@@ -127,6 +128,8 @@ body {
     text-decoration: underline;
 }
 
+=======
+>>>>>>> 44fe5e6731138daa4aee14ed7f6d78cc67d18a2d
 .signup-link a:hover {
     text-decoration: underline;
 }

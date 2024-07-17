@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+<<<<<<< HEAD
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +23,10 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+=======
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> 44fe5e6731138daa4aee14ed7f6d78cc67d18a2d
 
 import com.fooddilivery.module.User;
 import com.fooddivery.dao.UserDao;
@@ -40,6 +45,7 @@ public class UserDaoImpl implements UserDao {
 	private final static String UPDATE_QUERY ="update `user` set `Name`=?, `Username`=?, `Password`=?, `Email`=?,PhoneNumber`=?,"
 			+ "`Adress`=?,`Role`=? where `UserID`=? ";
 	private final static String SELECT_ALL_QUERY ="select * from `user`";
+<<<<<<< HEAD
 	private final static String SELECT_By_EMAIL = "select * from user where email = ?";
 	private final static String RESET_TOKEN = "update user set `reset_token` = ?, `reset_token_expiry`= ? where email = ?";
 	private final static String UPDATE_PASSWORD = "update user set password = ? where reset_token = ?";
@@ -50,6 +56,8 @@ public class UserDaoImpl implements UserDao {
 	 private static final String PASSWORD = System.getenv("EMAIL_PASSWORD"); // Get from environment variable
 
 
+=======
+>>>>>>> 44fe5e6731138daa4aee14ed7f6d78cc67d18a2d
 	public UserDaoImpl() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -152,7 +160,11 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<User> getallUser() {
+<<<<<<< HEAD
 		ArrayList<User> userList = new ArrayList<>();
+=======
+		ArrayList<User> userList = new ArrayList();
+>>>>>>> 44fe5e6731138daa4aee14ed7f6d78cc67d18a2d
 
 		try {
 			 statement = connection.createStatement();
@@ -170,6 +182,10 @@ public class UserDaoImpl implements UserDao {
 
 					User user = new User(userId, name, userName, password, email, phoneNum, adress, role);
 					userList.add(user);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 44fe5e6731138daa4aee14ed7f6d78cc67d18a2d
 			  }
 
 
@@ -203,6 +219,7 @@ public class UserDaoImpl implements UserDao {
 	    }
 	    return null;
 	}
+<<<<<<< HEAD
 	
 	 public boolean updatePassword(String updatedPassword, String token) {
 		  try {
@@ -333,4 +350,8 @@ public class UserDaoImpl implements UserDao {
 	 
 	 
 	 
+=======
+
+
+>>>>>>> 44fe5e6731138daa4aee14ed7f6d78cc67d18a2d
 }

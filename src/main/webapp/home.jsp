@@ -43,7 +43,11 @@
     if (restaurants != null) {
         for(Restaurant res :restaurants) {
     %>
+<<<<<<< HEAD
     <a href="MenuServlete?restaurantId=<%=res.getResturantId()%>" class="restaurant">
+=======
+    <a href="MenuServlete?restaurantId=<%= res.getResturantId()%>" class="restaurant">
+>>>>>>> 44fe5e6731138daa4aee14ed7f6d78cc67d18a2d
         <img alt="<%=res.getName()%>" src="<%=res.getImagePath()%>">
         <p><%= res.getName()%></p>
         <p>Rating: <%= res.getRating()%></p>
