@@ -97,9 +97,6 @@ We welcome any and all contributions! Here are some ways you can get started:
 3. Suggestions: If you don't want to code but have some awesome ideas, open up an issue explaining some updates or improvements you would like to see!
 4. Documentation: If you see the need for some additional documentation, feel free to add some!
 
-Follow me on Social Media:
- 
- ![Social](https://img.shields.io/twitter/follow/SanjeevSanju00)
 
 ## Instructions
 1. Fork this repository
@@ -107,3 +104,6 @@ Follow me on Social Media:
 3. Add your contributions (code or documentation)
 4. Commit and push
 5. Wait for the pull request to be merged
+
+***Follow me on:***
+ ![Social](https://img.shields.io/twitter/follow/SanjeevSanju00)
