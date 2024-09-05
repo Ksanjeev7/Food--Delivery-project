@@ -2,52 +2,55 @@ package com.fooddelivery.daoImpl;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fooddilivery.module.OrderHistory;
-import com.fooddivery.dao.OrderHistoryDao;
+import com.fooddelivery.dao.OrderHistoryDao;
+import com.fooddelivery.module.Order;
+import com.fooddelivery.module.OrderHistory;
+import com.fooddelivery.util.DBConnectionUtil;
 
 public class OrderHistoryDaoImpl implements OrderHistoryDao {
 
-	private static Connection connection =null;
-	private static PreparedStatement prepareStatement =null;
+	private  Connection connection;
+	private  PreparedStatement prepareStatement =null;
 	private ResultSet res =null;
-	Statement statement = null;
 
-	private final static String INSERT_QUERY = "insert into `orderhistory`( `UserID`, `OrderID`, `OrderDate`, `TotalAmount`, `Status`)values(?,?,?,?,?)";
+	private final static String INSERT_QUERY = "insert into `orderhistory`( `UserID`, `OrderID`, `TotalAmount`)values(?,?,?)";
 	private final static String SELECT_QUERY ="select * from `orderhistory`  where `OrderHistoryID`=?";
 	private final static String DELETE_QUERY ="delete from `orderhistory` where `OrderHistoryID`=? ";
 	private final static String UPDATE_QUERY ="update `orderhistory` set `UserID`=?, `OrderID`=?, `OrderDate`=?,`TotalAmount`=?,Status`=? where `OrderHistoryID`=? ";
-	private final static String SELECT_ALL_QUERY ="select * from `orderhistory` ";
+	private final static String SELECT_BY_ID ="select * from `orderhistory` where UserId = ? order by orderdate desc";
 
 
 
 	public OrderHistoryDaoImpl() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/foodapp","root","Sanju@71");
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
+		/*
+		 * try { Class.forName("com.mysql.cj.jdbc.Driver"); connection =
+		 * DriverManager.getConnection("jdbc:mysql://localhost:3306/foodapp","root",
+		 * "Sanju@71"); } catch (ClassNotFoundException | SQLException e) {
+		 * e.printStackTrace();
+		} */
+		this.connection = DBConnectionUtil.getConnection();
+              
 	}
 
 	@Override
-	public void addOrderHistory(OrderHistory orderHistory) {
+	public void addOrderHistory(Order order) {
 		try {
 			 prepareStatement = connection.prepareStatement(INSERT_QUERY);
-			 prepareStatement.setInt(1,orderHistory.getUserId());
-			 prepareStatement.setInt(2, orderHistory.getOrderId());
-			 prepareStatement.setDate(3, new java.sql.Date(orderHistory.getOrderDate().getTime()));
-			 prepareStatement.setDouble(4,orderHistory.getTotalAmount());
-			 prepareStatement.setString(5,orderHistory.getStatus());
-			  int i = prepareStatement.executeUpdate();
-			  System.out.println(i);
+			 prepareStatement.setInt(1,order.getUserId());
+			 prepareStatement.setString(2, order.getOrderId());
+//			 prepareStatement.setDate(3, new java.sql.Date(order.getOrderDate().getTime()));
+			 prepareStatement.setDouble(3,order.getTotalAmount());
+//			 prepareStatement.setString(5,"Delivered");
+			   int executeUpdate = prepareStatement.executeUpdate();
+			   if(executeUpdate > 0) {
+//		            System.out.println("Order added to history successfully with default status.");
+			   }
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -65,11 +68,11 @@ public class OrderHistoryDaoImpl implements OrderHistoryDao {
 			  while(res.next()) {
 				  int orderHistoryId1=res.getInt("OrderHistoryID");
 				  int userId= res.getInt("UserID");
-				  int orderId=res.getInt("OrderID");
+				  String orderId=res.getString("OrderID");
 				  Date orderDate =res.getDate("OrderDate");
 				  Double totalAmount =res.getDouble("TotalAmount");
 				  String status =res.getString("Status");
-				  return new OrderHistory(orderHistoryId1, userId, orderId, orderDate, orderId, status);
+				  return new OrderHistory(orderHistoryId1, userId, orderId, orderDate, totalAmount, status);
 			  }
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,17 +82,16 @@ public class OrderHistoryDaoImpl implements OrderHistoryDao {
 
 	@Override
 	public void updateOrderHistory(OrderHistory orderHistory) {
-		 int i=0;
-
+		
 			try {
 				 prepareStatement = connection.prepareStatement(UPDATE_QUERY);
 				 prepareStatement.setInt(1,orderHistory.getUserId());
-				 prepareStatement.setInt(2, orderHistory.getOrderId());
+				 prepareStatement.setString(2, orderHistory.getOrderId());
 				 prepareStatement.setDate(3, new java.sql.Date(orderHistory.getOrderDate().getTime()));
 				 prepareStatement.setDouble(4, orderHistory.getTotalAmount());
 				 prepareStatement.setString(5, orderHistory.getStatus());
 				 prepareStatement.setInt(5, orderHistory.getOrderHistoryId());
-				  i = prepareStatement.executeUpdate();
+				 prepareStatement.executeUpdate();
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -99,37 +101,38 @@ public class OrderHistoryDaoImpl implements OrderHistoryDao {
 
 	@Override
 	public void deleteOrderHistory(int orderHistoryId) {
-		int i =0;
 		try {
 			 prepareStatement = connection.prepareStatement(DELETE_QUERY);
 			 prepareStatement.setInt(1,orderHistoryId);
-			   i = prepareStatement.executeUpdate();
+			   prepareStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public List<OrderHistory> getOrderHistoriesByUser(int userId) {
-		ArrayList<OrderHistory> orderHistoryList = new ArrayList<>();
+	public List<OrderHistory> getOrderHistoriesByUserId(int userId) {
+		List<OrderHistory> orderHistoryList = new ArrayList<>();
 		try {
-
-			statement = connection.createStatement();
-			  res = statement.executeQuery(SELECT_ALL_QUERY);
+			prepareStatement = connection.prepareStatement(SELECT_BY_ID);
+			 prepareStatement.setInt(1, userId);
+			  res = prepareStatement.executeQuery();
 			  while(res.next()) {
 				  int orderHistoryId=res.getInt("OrderHistoryID");
 				  int userId1= res.getInt("UserID");
-				  int orderId=res.getInt("OrderID");
+				  String orderId=res.getString("OrderID");
 				  Date orderDate =res.getDate("OrderDate");
 				  Double totalAmount =res.getDouble("TotalAmount");
 				  String status =res.getString("Status");
-				  OrderHistory orderHistory = new OrderHistory(orderHistoryId, userId1, orderId, orderDate, orderId, status);
+				  OrderHistory orderHistory = new OrderHistory(orderHistoryId, userId1, orderId, orderDate, totalAmount, status);
+
+				  
 				  orderHistoryList.add(orderHistory);
 			  }
+				return orderHistoryList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return orderHistoryList;
+		return null;
 	}
 }

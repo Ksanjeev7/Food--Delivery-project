@@ -2,7 +2,6 @@
 package com.fooddelivery.daoImpl;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,8 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fooddilivery.module.Menu;
-import com.fooddivery.dao.MenuDao;
+import com.fooddelivery.dao.MenuDao;
+import com.fooddelivery.module.Menu;
+import com.fooddelivery.util.DBConnectionUtil;
 
 public class MenuDaoImpl implements MenuDao {
 	private  Connection connection =null;
@@ -22,44 +22,37 @@ public class MenuDaoImpl implements MenuDao {
 	private final static String INSERT_QUERY = "insert into `menu`(`IdRestaurant`, `ItemName`, `Description`, `Price`, `Ratings`, `isAvailable`, `ImagePath`)values(?,?,?,?,?,?,?)";
 	private final static String SELECT_QUERY ="select * from `menu`  where `MenuID`=?";
 	private final static String DELETE_QUERY ="delete from `menu` where `MenuID`=? ";
-	private final static String UPDATE_QUERY ="update `menu` set `Idrestaurant`=?, `ItemName`=?, `Description`=?,`Price`=?, `Ratings`=?,`isAvailable`=? where `MenuID`=? ";
+	private final static String UPDATE_QUERY ="update `menu` set `Idrestaurant`=?, `ItemName`=?, `Description`=?,`Price`=?, `Ratings`=?,`isAvailable`=?,`imagepath`=? where `MenuID`=? ";
 	private final static String SELECT_ALL_QUERY ="select * from `menu` where `Idrestaurant`= ?";
 
 	public MenuDaoImpl() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			 connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/foodapp", "root", "Sanju@71");
-		} catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver not found: " + e.getMessage());
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-            System.err.println("SqL Exception: " + e.getMessage());
-
-			e.printStackTrace();
-		}
+		connection = DBConnectionUtil.getConnection();
 	}
 	@Override
-	public void addMenu(Menu menu) {
+	public boolean addMenu(Menu menu) {
 		try {
 			 prepareStatement = connection.prepareStatement(INSERT_QUERY);
-			 prepareStatement.setInt(1,menu.getMenuId());
-			 prepareStatement.setInt(2, menu.getRestuarantId());
-			 prepareStatement.setString(3, menu.getItemName());
-			 prepareStatement.setString(4,menu.getDescription());
-			 prepareStatement.setDouble(5, menu.getPrice());
-			 prepareStatement.setDouble(6, menu.getRating());
-			 prepareStatement.setString(7, menu.isAvailable());
-			 prepareStatement.setString(8, menu.getImagePath());
-			 prepareStatement.executeUpdate();
+			 prepareStatement.setInt(1, menu.getRestuarantId());
+			 prepareStatement.setString(2, menu.getItemName());
+			 prepareStatement.setString(3,menu.getDescription());
+			 prepareStatement.setDouble(4, menu.getPrice());
+			 prepareStatement.setDouble(5, menu.getRating());
+			 prepareStatement.setString(6, menu.isAvailable());
+			 prepareStatement.setString(7, menu.getImagePath());
+			 int executeUpdate = prepareStatement.executeUpdate();
+			 
+			 if(executeUpdate > 0) {
+				 return true;
+			 }
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 	@Override
-	public Menu getMenu(int menuId) {
+	public Menu getMenuById(int menuId) {
 		try {
 			 prepareStatement = connection.prepareStatement(SELECT_QUERY);
 			 prepareStatement.setInt(1, menuId);
@@ -73,8 +66,7 @@ public class MenuDaoImpl implements MenuDao {
 				  Double rating =res.getDouble("Ratings");
 				  String isAvailable= res.getString("isAvailable");
 				  String imagePath =res.getString("ImagePath");
-				 Menu menu = new Menu(menuId1, resId, itemName, description, menuId1, resId, isAvailable, imagePath);
-				    System.out.println("Retrieved Menu: " + menu);
+				 Menu menu = new Menu(menuId1, resId, itemName, description, price, rating, isAvailable, imagePath);
 				 return menu;
 			  }
 		} catch (SQLException e) {
@@ -84,9 +76,7 @@ public class MenuDaoImpl implements MenuDao {
 	}
 
 	@Override
-	public void updateMenu(Menu menu) {
-
-
+	public boolean updateMenu(Menu menu) {
 			try {
 				 prepareStatement = connection.prepareStatement(UPDATE_QUERY);
 				 prepareStatement.setInt(1,menu.getRestuarantId());
@@ -95,26 +85,35 @@ public class MenuDaoImpl implements MenuDao {
 				 prepareStatement.setDouble(4, menu.getPrice());
 				 prepareStatement.setDouble(5, menu.getRating());
 				 prepareStatement.setString(6, menu.isAvailable());
-				 prepareStatement.setInt(7, menu.getMenuId());
-				  prepareStatement.executeUpdate();
+				 prepareStatement.setString(7, menu.getImagePath());
+				 
+				 prepareStatement.setInt(8, menu.getMenuId());
+				  int executeUpdate = prepareStatement.executeUpdate();
+				  
+				  if(executeUpdate!= 0) {
+					  return true;
+				  }
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
-
-
+			return false;
 	}
 
 	@Override
-	public void deleteMenu(int menuId) {
+	public boolean deleteMenu(int menuId) {
 		try {
 			 prepareStatement = connection.prepareStatement(DELETE_QUERY);
 			 prepareStatement.setInt(1,menuId);
-			    prepareStatement.executeUpdate();
+			    int executeUpdate = prepareStatement.executeUpdate();
+			    if(executeUpdate != 0)
+			    {
+			    	return true;
+			    }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 	@Override
@@ -137,10 +136,11 @@ public class MenuDaoImpl implements MenuDao {
 				  Menu menu = new Menu(menuId, resId, itemName, description,price,rating, isAvailable, imagePath);
 				  menuList.add(menu);
 			  }
+		return menuList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return menuList;
+		return null;
 	}
 
 }

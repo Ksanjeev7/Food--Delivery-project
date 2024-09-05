@@ -1,124 +1,226 @@
 @charset "UTF-8";
 
-
-body, h1, h2, h3, p, img {
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    border: 0;
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxF3Yk263mcYeVxlWiFcZL9R8ELVE38MNvwA&s"); 
+    background-size: cover;
+    background-position: center;
+    color: #333;
 }
 
-/* Set a background color */
-body {
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
-}
 header {
-    background-color: #333;
+    background-color: #2C3E50;
     color: white;
+    padding: 10px;
     text-align: center;
-    padding: 40px;
-    width: 100%;
+    position: fixed;
 }
 
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header h1 {
+    margin: 10px;
+    font-size: 2rem;
+}
+
+/* Navigation bar styles */
 nav {
     display: flex;
-    justify-content: center;
-    margin-top: 10px;
+    align-items: center;
 }
 
 nav a {
     color: white;
     text-decoration: none;
     margin: 0 10px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #444;
 }
 
 .user-links {
-    display: flex;
-    align-items: center;
+    position: relative;
 }
 
-.user-links p {
-    margin: 0 10px;
-}
-.user-links form input {
-    background-color: #1D2B53; /* Dark background color for the button */
-    color: white; /* Text color for the button */
-    padding: 10px 15px; /* Padding for the button */
-    border: none; /* Remove button border */
-    border-radius: 4px; /* Rounded corners for the button */
-    cursor: pointer; /* Add pointer cursor on hover */
+.dropbtn {
+    background-color: #34495E;
+    color: white;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-.user-links form input.view-cart-btn:hover {
-    background-color: #4A013E; 
-    color: #FFFFFF; 
-
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    overflow: hidden;
 }
-    
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+main {
+    padding-top: 80px;
+}
+
+.heading {
+    text-align: center;
+    margin-top: 20px;
+    color: #28a745;
+    font-size: 2rem;
+}
+
 .container {
     max-width: 1200px;
-    margin: 50px auto;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.menu-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+}
+
+.menu-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 2px solid #28a745;
+}
+
+.menu-info {
+    padding: 15px;
+}
+
+.menu-info h3 {
+    margin-bottom: 10px;
+    color: #2C3E50;
+}
+
+.menu-info p {
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.menu-info .available {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.menu-info .not-available {
+    color: #d9534f;
+    font-weight: bold;
+}
+
+.menu-form {
     display: flex;
-    flex-wrap: wrap; 
-    justify-content: space-between; 
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-top: 1px solid #ddd;
+    background-color: #f8f8f8;
 }
 
-.menu {
-    background-color: #ffffff; /* Background color for the box */
-    padding: 20px; /* Space around the content inside the box */
-    margin: 10px; /* Space between boxes */
-    border-radius: 8px; /* Rounded corners for the box */
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Shadow for the box */
-    flex: 0 0 calc(33.333% - 20px); /* Adjusted to account for margin */
-    box-sizing: border-box; /* Ensure the padding and border are included in the element's total width */
-    display: flex;
-    flex-direction: column; /* Items inside will stack vertically */
-    align-items: center; /* Center the items horizontally */
-    text-align: center; /* Center the text inside the box */
+.menu-form label {
+    margin-right: 10px;
 }
 
-.menu img {
-    max-width: 80%; /* Limit image width to fit inside the box */
-    height: auto;
-    border-radius: 8px; /* Rounded corners for the image */
-    margin-bottom: 15px; /* Space below the image */
-}
-
-.add-to-cart-btn {
-    background-color: #28a745;  /* Green color */
-    color: #fff;  /* Text color */
-    padding: 10px 20px;  /* Adjust padding as needed */
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;  /* Adjust margin as needed */
+.menu-form input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
-.add-to-cart-btn:hover {
-    background-color: #218838;  /* Darker green on hover */
-}
-
-/* Style for Quantity Input */
-form input[type="number"] {
-    width: 50px;  /* Adjust width as needed */
-    padding: 5px;  /* Adjust padding as needed */
-    margin-right: 10px;  /* Adjust margin as needed */
-    border: 1px solid #ccc;  /* Border color */
-    border-radius: 3px;  /* Rounded corners */
-}
 .add-to-cart-btn {
-    background-color: #1D2B53;
+    background-color: #28a745;
     color: white;
-    padding: 15px 20px;
+    padding: 8px 15px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    align-self: center; 
+    transition: background-color 0.3s ease;
 }
 
 .add-to-cart-btn:hover {
-    background-color: #4F6F52;
+    background-color: #218838;
+}
+
+.no-menu-items {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #d9534f;
+    margin-top: 50px;
+}
+
+@media screen and (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav {
+        margin-top: 10px;
+    }
+
+    .container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .menu-card img {
+        height: 150px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .menu-card img {
+        height: 120px;
+    }
 }
